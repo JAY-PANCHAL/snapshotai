@@ -129,16 +129,19 @@ export default function HeadshotStudio({ selectedTemplate, photoData }) {
     toast('Generating your headshots…', 'info', 8000);
 
     await Promise.all(newSeeds.map(async (seed, idx) => {
-      const url = buildPollinationsUrl(prompt, model, size.w, size.h, seed);
+      const imageUrl = buildPollinationsUrl(prompt, model, size.w, size.h, seed);
+      // Use serverless proxy to avoid CORS issues
+      const proxyUrl = `/api/image?url=${encodeURIComponent(imageUrl)}`;
       try {
-        const res = await fetch(url);
+        const res = await fetch(proxyUrl);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const blob = await res.blob();
         const dataUrl = URL.createObjectURL(blob);
-        results[idx] = { url: dataUrl, seed, fetchUrl: url };
+        results[idx] = { url: dataUrl, seed, fetchUrl: imageUrl };
         setImages([...results]);
         setLoadingStates(prev => ({ ...prev, [idx]: 'done' }));
-      } catch {
+      } catch (err) {
+        console.error(`Failed to fetch image ${idx}:`, err);
         results[idx] = { error: true, seed };
         setImages([...results]);
         setLoadingStates(prev => ({ ...prev, [idx]: 'error' }));
@@ -165,17 +168,20 @@ export default function HeadshotStudio({ selectedTemplate, photoData }) {
     setLoadingStates(prev => ({ ...prev, [idx]: 'loading' }));
 
     const prompt = rebuildPrompt();
-    const url = buildPollinationsUrl(prompt, model, size.w, size.h, newSeed);
+    const imageUrl = buildPollinationsUrl(prompt, model, size.w, size.h, newSeed);
+    // Use serverless proxy to avoid CORS issues
+    const proxyUrl = `/api/image?url=${encodeURIComponent(imageUrl)}`;
     try {
-      const res = await fetch(url);
+      const res = await fetch(proxyUrl);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const blob = await res.blob();
       const dataUrl = URL.createObjectURL(blob);
       const updated = [...images];
-      updated[idx] = { url: dataUrl, seed: newSeed, fetchUrl: url };
+      updated[idx] = { url: dataUrl, seed: newSeed, fetchUrl: imageUrl };
       setImages(updated);
       setLoadingStates(prev => ({ ...prev, [idx]: 'done' }));
-    } catch {
+    } catch (err) {
+      console.error(`Regenerate failed for ${idx}:`, err);
       setLoadingStates(prev => ({ ...prev, [idx]: 'error' }));
       toast('Retry failed — please try again.', 'error');
     }
