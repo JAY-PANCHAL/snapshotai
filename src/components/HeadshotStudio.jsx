@@ -49,6 +49,30 @@ function buildPollinationsUrl(prompt, model, width, height, seed) {
   return `https://image.pollinations.ai/prompt/${encoded}?model=${model}&width=${width}&height=${height}&seed=${seed}&nologo=true&enhance=true&private=true`;
 }
 
+async function fetchHeadshotBlob(imageUrl) {
+  const proxyUrl = `/api/image?url=${encodeURIComponent(imageUrl)}`;
+  const requestUrls = import.meta.env.DEV
+    ? [imageUrl, proxyUrl]
+    : [proxyUrl, imageUrl];
+  let lastError = null;
+
+  for (const requestUrl of requestUrls) {
+    try {
+      const res = await fetch(requestUrl);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const contentType = (res.headers.get('content-type') || '').toLowerCase();
+      if (!contentType.startsWith('image/')) {
+        throw new Error(`Non-image response: ${contentType || 'unknown'}`);
+      }
+      return await res.blob();
+    } catch (err) {
+      lastError = err;
+    }
+  }
+
+  throw lastError || new Error('Failed to fetch generated image');
+}
+
 /* ─── component ─────────────────────────────────────────────── */
 export default function HeadshotStudio({ selectedTemplate, photoData }) {
   // Style settings
@@ -130,12 +154,8 @@ export default function HeadshotStudio({ selectedTemplate, photoData }) {
 
     await Promise.all(newSeeds.map(async (seed, idx) => {
       const imageUrl = buildPollinationsUrl(prompt, model, size.w, size.h, seed);
-      // Use serverless proxy to avoid CORS issues
-      const proxyUrl = `/api/image?url=${encodeURIComponent(imageUrl)}`;
       try {
-        const res = await fetch(proxyUrl);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const blob = await res.blob();
+        const blob = await fetchHeadshotBlob(imageUrl);
         const dataUrl = URL.createObjectURL(blob);
         results[idx] = { url: dataUrl, seed, fetchUrl: imageUrl };
         setImages([...results]);
@@ -169,12 +189,8 @@ export default function HeadshotStudio({ selectedTemplate, photoData }) {
 
     const prompt = rebuildPrompt();
     const imageUrl = buildPollinationsUrl(prompt, model, size.w, size.h, newSeed);
-    // Use serverless proxy to avoid CORS issues
-    const proxyUrl = `/api/image?url=${encodeURIComponent(imageUrl)}`;
     try {
-      const res = await fetch(proxyUrl);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const blob = await res.blob();
+      const blob = await fetchHeadshotBlob(imageUrl);
       const dataUrl = URL.createObjectURL(blob);
       const updated = [...images];
       updated[idx] = { url: dataUrl, seed: newSeed, fetchUrl: imageUrl };

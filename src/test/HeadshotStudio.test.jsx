@@ -8,6 +8,7 @@ import { TEMPLATES } from '../data/templates'
 const mockBlob = new Blob(['img'], { type: 'image/jpeg' })
 global.fetch = vi.fn().mockResolvedValue({
   ok: true,
+  headers: { get: () => 'image/jpeg' },
   blob: () => Promise.resolve(mockBlob),
 })
 
@@ -31,6 +32,7 @@ describe('HeadshotStudio', () => {
     vi.clearAllMocks()
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
+      headers: { get: () => 'image/jpeg' },
       blob: () => Promise.resolve(mockBlob),
     })
     global.URL.createObjectURL = vi.fn(() => 'blob:http://localhost/test-img')
@@ -208,7 +210,7 @@ describe('HeadshotStudio', () => {
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalled()
       const url = global.fetch.mock.calls[0][0]
-      expect(url).toMatch(/pollinations\.ai/)
+      expect(url).toMatch(/pollinations\.ai|\/api\/image/)
     })
   })
 

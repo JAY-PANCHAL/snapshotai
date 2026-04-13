@@ -1,48 +1,7 @@
-// Vercel Serverless Functions — multiple endpoints
 // /api/claude — proxies Anthropic API calls (disabled for MVP)
-// /api/image — proxies Pollinations.ai image requests (fixes CORS issues)
 
 export default async function handler(req, res) {
-  const { pathname } = new URL(req.url, `http://${req.headers.host}`);
-
-  // Route to image proxy for /api/image
-  if (pathname === '/api/image') {
-    return handleImageProxy(req, res);
-  }
-
-  // Route to Claude proxy for /api/claude (disabled in MVP)
-  if (pathname === '/api/claude') {
-    return handleClaudeProxy(req, res);
-  }
-
-  return res.status(404).json({ error: 'Endpoint not found' });
-}
-
-async function handleImageProxy(req, res) {
-  // Proxy image requests from Pollinations.ai to avoid CORS errors
-  // Browser calls /api/image?url=... → We fetch from pollinations.ai → Return image blob
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Use GET to fetch images' });
-  }
-
-  const { url } = req.query;
-  if (!url) {
-    return res.status(400).json({ error: 'Missing url parameter' });
-  }
-
-  try {
-    const imageRes = await fetch(url);
-    if (!imageRes.ok) throw new Error(`HTTP ${imageRes.status}`);
-
-    const buffer = await imageRes.arrayBuffer();
-    const contentType = imageRes.headers.get('content-type') || 'image/jpeg';
-
-    res.setHeader('Content-Type', contentType);
-    res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache 1 year
-    res.status(200).send(Buffer.from(buffer));
-  } catch (err) {
-    return res.status(500).json({ error: err.message || 'Failed to fetch image' });
-  }
+  return handleClaudeProxy(req, res);
 }
 
 async function handleClaudeProxy(req, res) {
