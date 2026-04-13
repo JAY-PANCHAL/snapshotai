@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Backgrounds */
+  --bg:       #09090c;
+  --surface:  #111118;
+  --surface2: #18181f;
+  --surface3: #202028;
+  --surface4: #28282e;
+
+  /* Borders */
+  --border:       rgba(255,255,255,0.06);
+  --border-hover: rgba(255,255,255,0.12);
+  --border-focus: rgba(201,168,76,0.4);
+
+  /* Brand: gold */
+  --gold:        #c9a84c;
+  --gold-light:  #e8c97a;
+  --gold-dark:   #9a7a2a;
+  --gold-dim:    rgba(201,168,76,0.10);
+  --gold-border: rgba(201,168,76,0.22);
+  --gold-glow:   rgba(201,168,76,0.15);
+
+  /* Text */
+  --text:      #ede9e0;
+  --text-muted:#8a8798;
+  --text-dim:  #44424c;
+
+  /* Status */
+  --green:     #22c55e;
+  --green-dim: rgba(34,197,94,0.12);
+  --red:       #ef4444;
+  --red-dim:   rgba(239,68,68,0.12);
+
+  /* Radius */
+  --r:  10px;
+  --r2: 16px;
+  --r3: 22px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+  --shadow-gold: 0 4px 20px rgba(201,168,76,0.15);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--surface4); }
+
+/* ── Inputs & buttons ── */
+button, input, select, textarea { font-family: inherit; cursor: pointer; }
+input, select, textarea { cursor: text; }
+
+/* ── Focus ring ── */
+:focus-visible { outline: 2px solid var(--gold-border); outline-offset: 3px; border-radius: 6px; }
+
+/* ── Selection ── */
+::selection { background: var(--gold-dim); color: var(--gold-light); }
+
+/* ── Scroll-reveal animations ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+[data-reveal][data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-reveal="fade"] {
+  transform: none;
+}
+
+[data-reveal="up-slow"] {
+  transform: translateY(40px);
+  transition-duration: 0.75s;
+}
+
+[data-reveal="left"] {
+  transform: translateX(-28px);
+}
+
+[data-reveal="right"] {
+  transform: translateX(28px);
+}
+
+/* Stagger children */
+[data-stagger] > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+[data-stagger][data-revealed="true"] > *:nth-child(1) { opacity:1; transform:none; transition-delay: 0.05s; }
+[data-stagger][data-revealed="true"] > *:nth-child(2) { opacity:1; transform:none; transition-delay: 0.12s; }
+[data-stagger][data-revealed="true"] > *:nth-child(3) { opacity:1; transform:none; transition-delay: 0.19s; }
+[data-stagger][data-revealed="true"] > *:nth-child(4) { opacity:1; transform:none; transition-delay: 0.26s; }
+[data-stagger][data-revealed="true"] > *:nth-child(5) { opacity:1; transform:none; transition-delay: 0.33s; }
+[data-stagger][data-revealed="true"] > *:nth-child(6) { opacity:1; transform:none; transition-delay: 0.40s; }
+[data-stagger][data-revealed="true"] > *:nth-child(n+7) { opacity:1; transform:none; transition-delay: 0.47s; }
+
+/* ── Glass card utility ── */
+.glass {
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(12px);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r2);
+}
+
+/* ── Gradient text utility ── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, #a07830 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Shimmer skeleton ── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: var(--r);
+}
+
+/* ── Spinner ── */
+@keyframes spin { to { transform: rotate(360deg); } }

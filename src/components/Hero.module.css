@@ -1,0 +1,262 @@
+.hero {
+  padding: 90px 2rem 64px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Particle canvas ── */
+.particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ── Radial glows ── */
+.glow {
+  position: absolute;
+  top: -140px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(201,168,76,0.09) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.glow2 {
+  position: absolute;
+  bottom: -100px;
+  left: 30%;
+  width: 500px;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(100,80,200,0.05) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ── Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold-dim);
+  border: 0.5px solid var(--gold-border);
+  color: var(--gold-light);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 7px 18px;
+  border-radius: 100px;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.badgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Headline ── */
+.h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5.5vw, 68px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  margin-bottom: 22px;
+  position: relative;
+  z-index: 1;
+}
+
+.italic {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, #b8943e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: shimmerText 4s ease infinite;
+}
+
+@keyframes shimmerText {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── Subtitle ── */
+.sub {
+  font-size: 16px;
+  color: var(--text-muted);
+  max-width: 540px;
+  margin: 0 auto 40px;
+  line-height: 1.75;
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── CTA buttons ── */
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 56px;
+  position: relative;
+  z-index: 1;
+}
+
+.btnPrimary {
+  position: relative;
+  overflow: hidden;
+  background: var(--gold);
+  color: #0c0c0e;
+  border: none;
+  padding: 15px 34px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btnPrimary:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(201,168,76,0.25);
+}
+
+.btnPrimary:active { transform: translateY(0); }
+
+/* Shine sweep effect */
+.btnShine {
+  position: absolute;
+  top: 0; left: -120%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.35) 60%, transparent 100%);
+  pointer-events: none;
+  transition: none;
+}
+
+.btnPrimary:hover .btnShine {
+  animation: shine 0.55s ease forwards;
+}
+
+@keyframes shine {
+  from { left: -120%; }
+  to   { left: 140%; }
+}
+
+.btnArrow {
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.btnPrimary:hover .btnArrow { transform: translateX(3px); }
+
+.btnOutline {
+  background: transparent;
+  color: var(--text);
+  border: 0.5px solid var(--border-hover);
+  padding: 15px 34px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnOutline:hover {
+  border-color: var(--gold-border);
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+
+/* ── Stats ── */
+.statsRow {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding: 28px 0;
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statN {
+  font-size: 23px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: -0.01em;
+}
+
+.statL {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+/* ── Platform row ── */
+.platformRow {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.platformBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+  transition: all 0.18s;
+}
+
+.platformBadge:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.platformDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
