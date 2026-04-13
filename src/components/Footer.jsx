@@ -20,6 +20,7 @@ export default function Footer() {
               <a href="#templates-section" className={styles.link}>Style Templates</a>
               <a href="#samples-section" className={styles.link}>Sample Prompts</a>
               <a href="#studio-section" className={styles.link}>Generate Headshots</a>
+              <a href="#pricing-section" className={styles.link}>Pricing</a>
             </div>
             <div className={styles.linkGroup}>
               <p className={styles.linkGroupTitle}>AI Platforms</p>

@@ -9,6 +9,7 @@ export default function Navbar({ activeSection, onNav }) {
     { id: 'templates', label: 'Style Templates' },
     { id: 'samples',   label: 'Sample Prompts' },
     { id: 'studio',    label: '✦ Generate Headshots' },
+    { id: 'pricing',   label: 'Pricing' },
   ];
 
   return (

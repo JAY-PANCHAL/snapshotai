@@ -11,7 +11,18 @@ export default function PhotoUploader({ onPhotoReady }) {
   const [croppedPreview, setCroppedPreview] = useState(null);
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef();
-  const { analysis, loading, error, analyzePhoto } = usePhotoAnalysis();
+  // TODO: Claude API photo analysis disabled to avoid API costs during MVP
+  // Uncomment when ready to add premium analysis feature
+  // const { analysis, loading, error, analyzePhoto } = usePhotoAnalysis();
+
+  // Mock analysis for now
+  const [analysis, setAnalysis] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const analyzePhoto = async () => {
+    // API call disabled - will add as premium feature
+    return null;
+  };
 
   const processFile = useCallback(async (file) => {
     if (!file || !file.type.startsWith('image/')) return;
@@ -28,14 +39,15 @@ export default function PhotoUploader({ onPhotoReady }) {
     const cropped = await cropAndResize(dataUrl, ASPECT_RATIOS[cropRatio], 800);
     setCroppedPreview(cropped);
 
-    // analyze
-    const result = await analyzePhoto(b64, mt);
+    // TODO: Analyze with Claude Vision API (disabled for MVP)
+    // const result = await analyzePhoto(b64, mt);
+    // For now, skip analysis - users can still generate headshots
 
     onPhotoReady?.({
       dataUrl: cropped,
       base64: b64,
       mediaType: mt,
-      analysis: result,
+      analysis: null, // analysis disabled in MVP
     });
   }, [cropRatio, analyzePhoto, onPhotoReady]);
 

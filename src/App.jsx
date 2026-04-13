@@ -6,11 +6,12 @@ import PhotoUploader    from './components/PhotoUploader';
 import TemplateSelector from './components/TemplateSelector';
 import SampleGallery    from './components/SampleGallery';
 import HeadshotStudio   from './components/HeadshotStudio';
+import PricingPage      from './components/PricingPage';
 import Footer           from './components/Footer';
 import { ToastProvider } from './components/Toast';
 import './App.css';
 
-const SECTION_IDS = ['upload', 'templates', 'samples', 'studio'];
+const SECTION_IDS = ['upload', 'templates', 'samples', 'studio', 'pricing'];
 
 function useActiveSection() {
   const [active, setActive] = useState('home');
@@ -96,6 +97,8 @@ export default function App() {
           selectedTemplate={selectedTemplate}
           photoData={photoData}
         />
+
+        <PricingPage />
 
         <Footer />
       </div>

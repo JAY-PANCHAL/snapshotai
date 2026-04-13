@@ -108,11 +108,12 @@ describe('PhotoUploader', () => {
 
     await waitFor(() => {
       const arg = onPhotoReady.mock.calls[0]?.[0]
+      // Analysis is now disabled (Claude API commented out)
       expect(arg).toMatchObject({
         dataUrl:   expect.stringContaining('data:image/jpeg'),
         base64:    'mockBase64String',
         mediaType: 'image/jpeg',
-        analysis:  expect.objectContaining({ overallScore: 9 }),
+        analysis:  null, // No analysis in MVP
       })
     })
   })
